@@ -1,0 +1,17 @@
+/* CSS Document */
+#nv_review_meta_box label {
+	display: block;
+}
+#nv_review_meta_box .form-row {
+	display: block;
+	clear: both;
+	padding: 1rem;
+}
+#nv_review_meta_box .form-field {
+	float: left;
+	padding-right: 2rem;
+}
+#nv_review_meta_box .clear-fix {
+	clear: both;
+	padding-top: 2rem;
+}
