@@ -8,7 +8,7 @@
 		Author URI: http://nvwebdev.com/
 		License: GPL2
 	*/
-	
+	// ini_set('display_errors', '1');
 	require( 'inc/nv-helpers.php' );
 	
 	function create_nv_reviews() {
@@ -30,7 +30,7 @@
 				),
 				'public' => true,
 				'menu_position' => 15,
-				'supports' => array( 'title', 'editor', 'author', 'thumbnail', 'comments' ),
+				'supports' => array( 'title', 'author', 'thumbnail', 'comments' ),
 				'taxonomies' => array( '' ),
 				'has_archive' => true,
 			)
@@ -73,11 +73,19 @@
 		$state = esc_html( get_post_meta( $nv_review->ID, 'state', true ) );
 		$zip = esc_html( get_post_meta( $nv_review->ID, 'zip', true ) );
 		$phone = esc_html( get_post_meta( $nv_review->ID, 'phone', true ) );
-		echo '<h2>Location / Contact</h2>';
+		$smLink = get_post_meta( $nv_review->ID, 'smLink', true );
+		$signatureItems = get_post_meta( $nv_review->ID, 'signatureItems', true );
+		$ourThoughts = get_post_meta( $nv_review->ID, 'ourThoughts', true );
+		echo '<h2>Description</h2>';
+		echo wp_editor( $nv_review->post_content, 'content', array( 'textarea_rows' => 5 ) );
+		echo '<h2>Location / Contact Information</h2>';
+		echo '<div class="form-group">';
 		echo '<div class="form-row"><div class="form-field">';
 		echo '<label for="nvr_street">Street Address:</label>';
 		echo '<input type="text" id="nvr_street" name="street" value="' . $street .'" size="75" />';
 		echo '</div></div>';
+		echo '</div>';
+		echo '<div class="form-group">';
 		echo '<div class="form-row">';
 		echo '<div class="form-field">';
 		echo '<label for="nvr_city">City:</label>';
@@ -92,14 +100,60 @@
 		echo '<input type="text" id="nvr_zip" name="zip" value="' . $zip .'" size="10" />';
 		echo '</div>';
 		echo '</div>';
+		echo '</div>';
+		echo '<div class="form-group">';
 		echo '<div class="form-row">';
 		echo '<div class="form-field">';
 		echo '<label for="nvr_phone">Phone:</label>';
 		echo '<input type="text" id="nvr_phone" name="phone" value="' . $phone .'" size="15" /> Will be displayed as entered';
 		echo '</div>';
 		echo '</div>';
+		echo '</div>';
 		echo '<h2>Social Media / Web Sites</h2>';
-		echo '<div class="clear-fix"></div>';
+		echo '<div id="smLinks" class="form-group">';
+		if ( is_array( $smLink ) && count( $smLink ) > 0 ) {
+			foreach ( $smLink  AS $ind => $link ) {
+				echo '<div class="form-row">';
+				echo '<div class="form-field">';
+				echo '<label>Link Title</label>';
+				echo '<input type="text" name="smLink[' . $ind . '][title]" value="' . $link['title'] . '" size="25" />';
+				echo '</div>';
+				echo '<div class="form-field">';
+				echo '<label>Link</label>';
+				echo '<input type="text" name="smLink[' . $ind . '][link]" value="' . $link['link'] . '" size="70" />';
+				echo '</div>';
+				echo '<div class="form-field">';
+				echo '<input type="button" class="btnRemove" title="Remove this link" value=" X " />';
+				echo '</div>';
+				echo '</div>';
+			}
+		} else {
+			echo '<div class="form-row">';
+			echo '<div class="form-field">';
+			echo '<label>Link Title</label>';
+			echo '<input type="text" name="smLink[0][title]" value="" size="25" />';
+			echo '</div>';
+			echo '<div class="form-field">';
+			echo '<label>Link</label>';
+			echo '<input type="text" name="smLink[0][link]" value="" size="70" />';
+			echo '</div>';
+			echo '<div class="form-field">';
+			echo '<input type="button" class="btnRemove" title="Remove this link" value=" X " />';
+			echo '</div>';
+			echo '</div>';
+		}
+		echo '</div>';
+		echo '<div class="form-group">';
+		echo '<div class="form-row">';
+		echo '<div class="form-field">';
+		echo '<input type="button" id="addSMLink" value=" Add another link " />';
+		echo '</div>';
+		echo '</div>';
+		echo '</div>';
+		echo '<h2>Signature Items</h2>';
+		echo wp_editor( $signatureItems, 'signatureItems', array( 'media_buttons' => false, 'textarea_rows' => 5 ) );
+		echo '<h2>Our Thoughts</h2>';
+		echo wp_editor( $ourThoughts, 'ourThoughts', array( 'media_buttons' => false, 'textarea_rows' => 5 ) );
 	}
 	
 	/**
@@ -123,12 +177,62 @@
 			}
 		}
 	}
-
+	
+	function nv_reviews_include_template( $template_path ) {
+		// check to see if the requested page is a single Custom Post Type
+		if ( is_singular( 'review' ) ) {
+			// checks if the file exists in the theme first,
+			// otherwise serve the file from the plugin
+			if ( $theme_file = locate_template( array ( 'single-review.php' ) ) ) {
+				$template_path = $theme_file;
+			} else {
+				$template_path = plugin_dir_path( __FILE__ ) . '/templates/single-review.php';
+				// add_action( 'wp_enqueue_scripts', 'nv_reviews_cpt_styles' );
+			}
+		} else if ( is_post_type_archive( 'review' ) ) {
+			// else is the request an archive of the Custom Post Type
+			if ( $theme_file = locate_template( array ( 'archive-review.php' ) ) ) {
+				$template_path = $theme_file;
+			} else {
+				$template_path = plugin_dir_path( __FILE__ ) . '/templates/archive-review.php';
+				// add_action( 'wp_enqueue_scripts', 'nv_reviews_cpt_styles' );
+			}
+		}
+		// Return the path of the template to use
+		return $template_path;
+	}
+	
+	function nv_add_review_fields( $reviewID, $review ) {
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
+			return $reviewID;
+		
+		if ( !current_user_can( 'edit_post', $reviewID ) )
+			return $reviewID;
+		
+		if ( 'review' == $review->post_type ) {
+			update_post_meta( $reviewID, 'street', esc_attr( $_POST['street'] ) );
+			update_post_meta( $reviewID, 'city', esc_attr( $_POST['city'] ) );
+			update_post_meta( $reviewID, 'state', esc_attr( $_POST['state'] ) );
+			update_post_meta( $reviewID, 'zip', esc_attr( $_POST['zip'] ) );
+			update_post_meta( $reviewID, 'phone', esc_attr( $_POST['phone'] ) );
+			update_post_meta( $reviewID, 'signatureItems', $_POST['signatureItems'] );
+			update_post_meta( $reviewID, 'ourThoughts', $_POST['ourThoughts'] );
+			$smLinkArray = array();
+			foreach ( $_POST['smLink'] AS $link ) {
+				$smLinkArray[] = array(
+					'title' => esc_attr( $link['title'] ),
+					'link' => esc_attr( $link['link'] ),
+				);
+			}
+			update_post_meta( $reviewID, 'smLink', $smLinkArray );
+		}
+	}
+	
 	add_action( 'init', 'create_nv_reviews' );
 	add_action( 'after_setup_theme', 'nv_add_thumbs', 11 );
 	add_action( 'admin_init', 'nv_review_admin' );
 	add_filter( 'enter_title_here', 'change_enter_title_text', 10, 2 );
 	add_action( 'right_now_content_table_end', 'nv_reviews_totals_rightnow' );
-
+	add_action( 'save_post', 'nv_add_review_fields', 10, 2 );
+	// add_filter( 'template_include', 'nv_reviews_include_template', 1 );
 ?>
-
