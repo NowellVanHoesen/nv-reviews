@@ -20,4 +20,8 @@ jQuery(document).ready(function($) {
 			});
 		smLinkIndex++;
 	});
+	
+	$("body").on( 'mouseup', '#TB_closeWindowButton', function() {
+		// do ajax load of attached images excluding the featured image and display them in a meta box
+	});
 });

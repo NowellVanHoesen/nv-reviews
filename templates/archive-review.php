@@ -1,5 +1,10 @@
 <?php
+	/*
+		Template Name: Review Archive Template
+	*/
 	get_header();
-	echo "Archive Review Template from the plugin folder";
-	get_sidebar();
-	get_footer();
+?>
+
+<?php get_sidebar( 'review' ); ?>
+<?php get_sidebar(); ?>
+<?php get_footer(); ?>

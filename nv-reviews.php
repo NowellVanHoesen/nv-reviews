@@ -32,6 +32,7 @@
 				'menu_position' => 15,
 				'supports' => array( 'title', 'author', 'thumbnail', 'comments' ),
 				'taxonomies' => array( '' ),
+				'menu_icon' => plugins_url( '71.png', __FILE__ ),
 				'has_archive' => true,
 			)
 		);
@@ -187,15 +188,15 @@
 				$template_path = $theme_file;
 			} else {
 				$template_path = plugin_dir_path( __FILE__ ) . '/templates/single-review.php';
-				// add_action( 'wp_enqueue_scripts', 'nv_reviews_cpt_styles' );
+				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__), array( 'twentytwelve-style' ) );
 			}
 		} else if ( is_post_type_archive( 'review' ) ) {
 			// else is the request an archive of the Custom Post Type
 			if ( $theme_file = locate_template( array ( 'archive-review.php' ) ) ) {
 				$template_path = $theme_file;
 			} else {
-				$template_path = plugin_dir_path( __FILE__ ) . '/templates/archive-review.php';
-				// add_action( 'wp_enqueue_scripts', 'nv_reviews_cpt_styles' );
+				//$template_path = plugin_dir_path( __FILE__ ) . '/templates/archive-review.php';
+				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__), array( 'twentytwelve-style' ) );
 			}
 		}
 		// Return the path of the template to use
@@ -225,7 +226,12 @@
 				);
 			}
 			update_post_meta( $reviewID, 'smLink', $smLinkArray );
+			update_alphabatized_link_list();
 		}
+	}
+	
+	function update_alphabatized_link_list() {
+		
 	}
 	
 	add_action( 'init', 'create_nv_reviews' );
@@ -234,5 +240,5 @@
 	add_filter( 'enter_title_here', 'change_enter_title_text', 10, 2 );
 	add_action( 'right_now_content_table_end', 'nv_reviews_totals_rightnow' );
 	add_action( 'save_post', 'nv_add_review_fields', 10, 2 );
-	// add_filter( 'template_include', 'nv_reviews_include_template', 1 );
+	add_filter( 'template_include', 'nv_reviews_include_template', 1 );
 ?>

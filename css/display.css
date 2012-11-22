@@ -1,0 +1,40 @@
+/* CSS Document */
+.logo {
+	float: left;
+}
+.description {
+	float: left;
+}
+.description h2 {
+	padding-left: 1.5rem;
+	margin-top: 0;
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.gallery-item, .address {
+	float: left;
+}
+.gallery-item:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+.themeblvd-gmap {
+	float: right;
+}
+.address h2 {
+	margin-top: 0;
+}
+.address ul {
+	list-style: none;
+}
+.signatureItems {
+	clear: both;
+}
