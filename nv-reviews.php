@@ -36,6 +36,21 @@
 				'has_archive' => true,
 			)
 		);
+		
+		register_taxonomy(
+			'restaurant_categories',
+			'review',
+			array(
+				'labels' => array(
+					'name' => 'Restaurant Categories',
+					'add_new_item' => 'Add New Restaurant Category',
+					'new_item_name' => "New Restaurant Category"
+				),
+				'show_ui' => true,
+				'show_tagcloud' => false,
+				'hierarchical' => true
+			)
+		);
 	}
 	
 	/**
