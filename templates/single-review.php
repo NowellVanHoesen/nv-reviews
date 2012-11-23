@@ -84,7 +84,7 @@
 						<div class="gallery">
 							<h2><?php _e( 'Gallery', 'nvreview' ); ?></h2>
 							<?php
-								$galShortcode = '[gallery exclude="' . get_post_thumbnail_id( $post->ID ) . '"  columns="4"]';
+								$galShortcode = '[gallery orderby="menu_order" exclude="' . get_post_thumbnail_id( $post->ID ) . '"  columns="4"]';
 								echo do_shortcode( $galShortcode );
 							?>
 						</div><!-- .gallery -->
