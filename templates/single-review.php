@@ -55,7 +55,7 @@
 								<?php _e( $street, 'nvreview' ); ?><br /><?php _e( $addrLine2, 'nvreview' ); ?>
 							</p>
 							<p><?php echo $phone; ?></p>
-							<?php if( strlen( $smLink ) > 0 ) : ?>
+							<?php if( count( $smLink ) > 0 ) : ?>
 								<h4><?php _e( 'Web / Social Media', 'nvreview' ); ?></h4>
 								<ul>
 									<?php
