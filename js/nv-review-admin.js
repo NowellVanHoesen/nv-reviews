@@ -5,6 +5,7 @@ jQuery(document).ready(function($) {
 	
 	$("body").on("click", '.btnRemove', function(){
 		$(this).parents(".form-row").remove();
+		return false;
 	});
 	
 	$("#addSMLink").click( function(){
