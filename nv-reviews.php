@@ -92,8 +92,9 @@
 		$smLink = get_post_meta( $nv_review->ID, 'smLink', true );
 		$signatureItems = get_post_meta( $nv_review->ID, 'signatureItems', true );
 		$ourThoughts = get_post_meta( $nv_review->ID, 'ourThoughts', true );
+		wp_nonce_field( 'nvwd_review_cpt', 'nvwd_review_nonce' );
 		echo '<h2>Description</h2>';
-		echo wp_editor( $nv_review->post_content, 'content', array( 'textarea_rows' => 5 ) );
+		echo wp_editor( $nv_review->post_content, 'content', array( 'textarea_rows' => 8 ) );
 		echo '<h2>Location / Contact Information</h2>';
 		echo '<div class="form-group">';
 		echo '<div class="form-row"><div class="form-field">';
