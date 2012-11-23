@@ -220,29 +220,34 @@
 	}
 	
 	function nv_add_review_fields( $reviewID, $review ) {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE )
-			return $reviewID;
-		
-		if ( !current_user_can( 'edit_post', $reviewID ) )
-			return $reviewID;
-		
-		if ( 'review' == $review->post_type ) {
-			update_post_meta( $reviewID, 'street', esc_attr( $_POST['street'] ) );
-			update_post_meta( $reviewID, 'city', esc_attr( $_POST['city'] ) );
-			update_post_meta( $reviewID, 'state', esc_attr( $_POST['state'] ) );
-			update_post_meta( $reviewID, 'zip', esc_attr( $_POST['zip'] ) );
-			update_post_meta( $reviewID, 'phone', esc_attr( $_POST['phone'] ) );
-			update_post_meta( $reviewID, 'signatureItems', $_POST['signatureItems'] );
-			update_post_meta( $reviewID, 'ourThoughts', $_POST['ourThoughts'] );
-			$smLinkArray = array();
-			foreach ( $_POST['smLink'] AS $link ) {
-				$smLinkArray[] = array(
-					'title' => esc_attr( $link['title'] ),
-					'link' => esc_attr( $link['link'] ),
-				);
+		if ( empty( $_POST ) || !wp_verify_nonce( $_POST['nvwd_review_nonce'], 'nvwd_review_cpt' ) ) {
+			echo 'nonce failure';
+			exit;
+		} else {
+			if ( !current_user_can( 'edit_post', $reviewID ) ) {
+				return;
 			}
-			update_post_meta( $reviewID, 'smLink', $smLinkArray );
-			update_alphabatized_link_list();
+		
+			if ( 'review' == $review->post_type && !wp_is_post_revision( $reviewID ) && isset( $_POST['street'] ) ) {
+				update_post_meta( $reviewID, 'street', esc_attr( $_POST['street'] ) );
+				update_post_meta( $reviewID, 'city', esc_attr( $_POST['city'] ) );
+				update_post_meta( $reviewID, 'state', esc_attr( $_POST['state'] ) );
+				update_post_meta( $reviewID, 'zip', esc_attr( $_POST['zip'] ) );
+				update_post_meta( $reviewID, 'phone', esc_attr( $_POST['phone'] ) );
+				update_post_meta( $reviewID, 'signatureItems', $_POST['signatureItems'] );
+				update_post_meta( $reviewID, 'ourThoughts', $_POST['ourThoughts'] );
+				$smLinkArray = array();
+				if ( isset( $_POST['smLink'] ) ) {
+					foreach ( $_POST['smLink'] AS $link ) {
+						$smLinkArray[] = array(
+							'title' => esc_attr( $link['title'] ),
+							'link' => esc_attr( $link['link'] ),
+						);
+					}
+				}
+				update_post_meta( $reviewID, 'smLink', $smLinkArray );
+				update_alphabatized_link_list();
+			}
 		}
 	}
 	
