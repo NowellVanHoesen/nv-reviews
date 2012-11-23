@@ -140,7 +140,7 @@
 				echo '<input type="text" name="smLink[' . $ind . '][link]" value="' . $link['link'] . '" size="70" />';
 				echo '</div>';
 				echo '<div class="form-field">';
-				echo '<input type="button" class="btnRemove" title="Remove this link" value=" X " />';
+				echo '<a href="#" class="btnRemove button-secondary" title="Remove this link">X</a>';
 				echo '</div>';
 				echo '</div>';
 			}
@@ -155,7 +155,7 @@
 			echo '<input type="text" name="smLink[0][link]" value="" size="70" />';
 			echo '</div>';
 			echo '<div class="form-field">';
-			echo '<input type="button" class="btnRemove" title="Remove this link" value=" X " />';
+			echo '<a href="#" class="btnRemove button-secondary" title="Remove this link">X</a>';
 			echo '</div>';
 			echo '</div>';
 		}
@@ -163,7 +163,7 @@
 		echo '<div class="form-group">';
 		echo '<div class="form-row">';
 		echo '<div class="form-field">';
-		echo '<input type="button" id="addSMLink" value=" Add another link " />';
+		echo '<input type="button" class="button-secondary" id="addSMLink" value=" Add another link " />';
 		echo '</div>';
 		echo '</div>';
 		echo '</div>';
