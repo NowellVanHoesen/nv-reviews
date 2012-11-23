@@ -26,6 +26,9 @@
     clear: both;
     visibility: hidden;
 }
+.entry-content .gallery dd.wp-caption-text.gallery-caption {
+	display: none;
+}
 .themeblvd-gmap {
 	float: right;
 }
