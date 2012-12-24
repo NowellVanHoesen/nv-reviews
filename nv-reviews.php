@@ -207,12 +207,12 @@
 				$template_path = plugin_dir_path( __FILE__ ) . '/templates/single-review.php';
 				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__), array( 'twentytwelve-style' ) );
 			}
-		} else if ( is_post_type_archive( 'review' ) ) {
+		} else if ( is_post_type_archive( 'review' ) || is_tax( 'restaurant_categories' ) ) {
 			// else is the request an archive of the Custom Post Type
 			if ( $theme_file = locate_template( array ( 'archive-review.php' ) ) ) {
 				$template_path = $theme_file;
 			} else {
-				//$template_path = plugin_dir_path( __FILE__ ) . '/templates/archive-review.php';
+				$template_path = plugin_dir_path( __FILE__ ) . '/templates/archive-review.php';
 				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__), array( 'twentytwelve-style' ) );
 			}
 		}
