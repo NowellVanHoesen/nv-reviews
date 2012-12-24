@@ -221,9 +221,8 @@
 	}
 	
 	function nv_add_review_fields( $reviewID, $review ) {
-		if ( empty( $_POST ) || !wp_verify_nonce( $_POST['nvwd_review_nonce'], 'nvwd_review_cpt' ) ) {
-			echo 'nonce failure';
-			exit;
+		if ( empty( $_POST ) || ( isset( $_POST['nvwd_review_nonce'] ) && !wp_verify_nonce( $_POST['nvwd_review_nonce'], 'nvwd_review_cpt' ) ) ) {
+			return;
 		} else {
 			if ( !current_user_can( 'edit_post', $reviewID ) ) {
 				return;
