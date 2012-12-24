@@ -14,7 +14,6 @@
 					<span class="nav-previous"><?php previous_post_link( '%link', __( '<span class="meta-nav">&larr;</span>', 'nvreview' ) . ' %title' ); ?></span>
 					<span class="nav-next"><?php next_post_link( '%link', '%title ' . __( '<span class="meta-nav">&rarr;</span>', 'nvreview' ) ); ?></span>
 				</nav><!-- .nav-single -->
-				<?php ?>
 				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<header class="entry-header">
 						<h1 class="entry-title"><?php the_title(); ?></h1>
@@ -91,7 +90,7 @@
 					</div><!-- .entry-content -->
 					<footer class="entry-meta">
 						<?php twentytwelve_entry_meta(); ?>
-						<?php edit_post_link( __( 'Edit', 'twentytwelve' ), '<span class="edit-link">', '</span>' ); ?>
+						<?php edit_post_link( __( 'Edit', 'nvreview' ), '<span class="edit-link">', '</span>' ); ?>
 						<?php if ( is_singular() && get_the_author_meta( 'description' ) && is_multi_author() ) : // If a user has filled out their description and this is a multi-author blog, show a bio on their entries. ?>
 							<div id="author-info">
 								<div id="author-avatar">
