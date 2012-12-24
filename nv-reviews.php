@@ -48,7 +48,8 @@
 				),
 				'show_ui' => true,
 				'show_tagcloud' => false,
-				'hierarchical' => true
+				'hierarchical' => true,
+				'show_admin_column' => true,
 			)
 		);
 	}
