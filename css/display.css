@@ -4,6 +4,9 @@
 	padding-right: 5%;
 	max-width: 45%;
 }
+.entry-header {
+	margin: 0;
+}
 .entry-header p {
 	padding-top: 5px;
 }
@@ -47,7 +50,9 @@
 .signatureItems {
 	clear: both;
 }
-.nav-single span a {
+.nav-single span a,
+.nav-previous a,
+.nav-next a {
 	text-decoration: none;
 }
 .meta-nav {

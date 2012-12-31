@@ -52,10 +52,10 @@
 							</ul>
 						</header>
 						<div class="entry-content clearfix">
+							<div class="logo">
+								<?php the_post_thumbnail(); ?>
+							</div><!-- .logo -->
 							<div class="description">
-								<div class="logo">
-									<?php the_post_thumbnail(); ?>
-								</div><!-- .logo -->
 								<?php the_content( __( 'Continue reading <span class="meta-nav">&rarr;</span>', 'nvreview' ) ); ?>
 								<?php wp_link_pages( array( 'before' => '<div class="page-links">' . __( 'Pages:', 'nvreview' ), 'after' => '</div>' ) ); ?>
 							</div><!-- .description -->
