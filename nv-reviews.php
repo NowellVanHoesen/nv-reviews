@@ -255,6 +255,13 @@
 		
 	}
 	
+	function nv_reviews_term_format( $terms ) {
+		foreach ( $terms AS $term ) {
+			$term->name = $term->name . ' <span>' . $term->count . '</span>';
+		}
+		return $terms;
+	}
+	
 	add_action( 'init', 'create_nv_reviews' );
 	add_action( 'after_setup_theme', 'nv_add_thumbs', 11 );
 	add_action( 'admin_init', 'nv_review_admin' );
@@ -262,4 +269,5 @@
 	add_action( 'right_now_content_table_end', 'nv_reviews_totals_rightnow' );
 	add_action( 'save_post', 'nv_add_review_fields', 10, 2 );
 	add_filter( 'template_include', 'nv_reviews_include_template', 1 );
+	add_filter( 'get_the_terms', 'nv_reviews_term_format' );
 ?>

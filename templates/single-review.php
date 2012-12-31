@@ -17,9 +17,10 @@
 				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 					<header class="entry-header">
 						<h1 class="entry-title"><?php the_title(); ?></h1>
-						<p>
-							<?php the_terms( $post->ID, 'restaurant_categories', 'Categories: ', ' | ', '' ); ?>
-						</p>
+						<p>Categories:</p>
+						<ul class="tags blue">
+							<?php the_terms( $post->ID, 'restaurant_categories', '<li>', '</li><li>', '</li>' ); ?>
+						</ul>
 						<?php if ( comments_open() ) : ?>
 							<div class="comments-link">
 								<?php comments_popup_link( '<span class="leave-reply">' . __( 'Leave a reply', 'nvreview' ) . '</span>', __( '1 Reply', 'nvreview' ), __( '% Replies', 'nvreview' ) ); ?>

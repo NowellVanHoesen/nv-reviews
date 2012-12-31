@@ -46,9 +46,10 @@
 							<h1 class="entry-title">
 								<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( sprintf( __( 'Permalink to %s', 'nvreview' ), the_title_attribute( 'echo=0' ) ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
 							</h1>
-							<p>
-								<?php the_terms( $post->ID, 'restaurant_categories', 'Categories: ', ' | ', '' ); ?>
-							</p>
+							<p>Categories:</p>
+							<ul class="tags blue">
+								<?php the_terms( $post->ID, 'restaurant_categories', '<li>', '</li><li>', '</li>' ); ?>
+							</ul>
 						</header>
 						<div class="entry-content clearfix">
 							<div class="description">
