@@ -1,14 +1,15 @@
 /* CSS Document */
 .logo {
 	float: left;
-	padding-right: 10%;
-	max-width: 50%;
+	padding-right: 5%;
+	max-width: 45%;
 }
 .entry-header p {
 	padding-top: 5px;
 }
 .description {
 	float: left;
+	max-width: 50%;
 }
 .description h2 {
 	padding-left: 1.5rem;
