@@ -9,8 +9,8 @@
 		<div id="content" role="main">
 
 			<?php while ( have_posts() ) : the_post(); ?>
-				<nav class="nav-single">
-					<h3 class="assistive-text"><?php _e( 'Post navigation', 'nvreview' ); ?></h3>
+				<nav class="nav-single clear">
+					<!-- <h3 class="assistive-text"><?php _e( 'Post navigation', 'nvreview' ); ?></h3> -->
 					<span class="nav-previous"><?php previous_post_link( '%link', __( '<span class="meta-nav">&larr;</span>', 'nvreview' ) . ' %title' ); ?></span>
 					<span class="nav-next"><?php next_post_link( '%link', '%title ' . __( '<span class="meta-nav">&rarr;</span>', 'nvreview' ) ); ?></span>
 				</nav><!-- .nav-single -->
@@ -18,7 +18,7 @@
 					<header class="entry-header">
 						<h1 class="entry-title"><?php the_title(); ?></h1>
 						<p>Categories:</p>
-						<ul class="tags blue">
+						<ul class="tags red">
 							<?php the_terms( $post->ID, 'restaurant_categories', '<li>', '</li><li>', '</li>' ); ?>
 						</ul>
 						<?php if ( comments_open() ) : ?>
@@ -44,8 +44,9 @@
 								$smLink = get_post_meta( $post->ID, 'smLink', true );
 								$signatureItems = get_post_meta( $post->ID, 'signatureItems', true );
 								$ourThoughts = get_post_meta( $post->ID, 'ourThoughts', true );
+								$galImages = get_post_meta( $post->ID, 'galImages', true );
 								$addrLine2 = $city . ', ' . $state . ' ' . $zip;
-								$mapShortcode = '[tb_google_map zoom=15 width=65% height=300px address="' . $street . ' ' . $addrLine2 . '"]';
+								$mapShortcode = '[tb_google_map zoom=15 width=250px height=250px address="' . $street . ' ' . $addrLine2 . '"]';
 								$test = do_shortcode( $mapShortcode );
 								if ( $test !== $mapShortcode ) {
 									echo $test;
@@ -83,19 +84,16 @@
 						<?php endif; ?>
 						<div class="gallery">
 							<h2><?php _e( 'Gallery', 'nvreview' ); ?></h2>
-							<?php
-								$galShortcode = '[gallery orderby="menu_order" exclude="' . get_post_thumbnail_id( $post->ID ) . '"  columns="4"]';
-								echo do_shortcode( $galShortcode );
-							?>
+							<?php echo do_shortcode( '[gallery ids="' . $galImages . '" ]' ); ?>
 						</div><!-- .gallery -->
 					</div><!-- .entry-content -->
 					<footer class="entry-meta">
-						<?php twentytwelve_entry_meta(); ?>
+						<?php //twentytwelve_entry_meta(); ?>
 						<?php edit_post_link( __( 'Edit', 'nvreview' ), '<span class="edit-link">', '</span>' ); ?>
 						<?php if ( is_singular() && get_the_author_meta( 'description' ) && is_multi_author() ) : // If a user has filled out their description and this is a multi-author blog, show a bio on their entries. ?>
 							<div id="author-info">
 								<div id="author-avatar">
-									<?php echo get_avatar( get_the_author_meta( 'user_email' ), apply_filters( 'twentytwelve_author_bio_avatar_size', 68 ) ); ?>
+									<?php echo get_avatar( get_the_author_meta( 'user_email' ) ); ?>
 								</div><!-- #author-avatar -->
 								<div id="author-description">
 									<h2><?php printf( __( 'About %s', 'nvreview' ), get_the_author() ); ?></h2>
@@ -111,8 +109,8 @@
 					</footer><!-- .entry-meta -->
 				</article>
 
-				<nav class="nav-single">
-					<h3 class="assistive-text"><?php _e( 'Post navigation', 'nvreview' ); ?></h3>
+				<nav class="nav-single clear">
+					<!--<h3 class="assistive-text"><?php _e( 'Post navigation', 'nvreview' ); ?></h3>-->
 					<span class="nav-previous"><?php previous_post_link( '%link', __( '<span class="meta-nav">&larr;</span>', 'nvreview' ) . ' %title' ); ?></span>
 					<span class="nav-next"><?php next_post_link( '%link', '%title ' . __( '<span class="meta-nav">&rarr;</span>', 'nvreview' ) ); ?></span>
 				</nav><!-- .nav-single -->

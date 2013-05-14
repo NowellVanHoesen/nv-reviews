@@ -74,6 +74,12 @@
 	function nv_review_admin() {
 		wp_enqueue_style( 'nv_admin_style', plugins_url('css/admin.css', __FILE__) );
 		wp_enqueue_script( 'nv_admin_script', plugins_url('js/nv-review-admin.js', __FILE__) );
+		wp_localize_script( 'nv_admin_script', 'nvr_media',
+			array(
+				'title' => 'This is nvr_media.title',
+				'button' => 'This is nvr_media.button',
+			)
+		);
 		add_meta_box( 'nv_review_meta_box',
 			'Restaurant Review Details',
 			'display_nv_review_meta_box',
@@ -93,9 +99,8 @@
 		$smLink = get_post_meta( $nv_review->ID, 'smLink', true );
 		$signatureItems = get_post_meta( $nv_review->ID, 'signatureItems', true );
 		$ourThoughts = get_post_meta( $nv_review->ID, 'ourThoughts', true );
+		$galImages = get_post_meta( $nv_review->ID, 'galImages', true );
 		wp_nonce_field( 'nvwd_review_cpt', 'nvwd_review_nonce' );
-		echo '<h2>Description</h2>';
-		echo wp_editor( $nv_review->post_content, 'content', array( 'textarea_rows' => 8 ) );
 		echo '<h2>Location / Contact Information</h2>';
 		echo '<div class="form-group">';
 		echo '<div class="form-row"><div class="form-field">';
@@ -168,12 +173,30 @@
 		echo '</div>';
 		echo '</div>';
 		echo '</div>';
+		echo '<h2>Description</h2>';
+		echo wp_editor( $nv_review->post_content, 'content', array( 'media_buttons' => false, 'textarea_rows' => 8 ) );
 		echo '<h2>Signature Items</h2>';
 		echo wp_editor( $signatureItems, 'signatureItems', array( 'media_buttons' => false, 'textarea_rows' => 5 ) );
 		echo '<h2>Our Thoughts</h2>';
 		echo wp_editor( $ourThoughts, 'ourThoughts', array( 'media_buttons' => false, 'textarea_rows' => 5 ) );
+		echo '<h2>Image Gallery</h2>';
+		echo '<div class="review-gallery"><p><a href="#" class="nvr-open-media button button-primary" title="' . esc_attr__( 'Click Here to Open the Media Manager', 'nvr' ) . '">' . __( 'Click here to manage the gallery', 'nvr' ) . '</a><input type="hidden" name="galImages" id="nvr_galImages" value="' . $galImages . '" /></p></div>';
 	}
 	
+	/**
+	 * Change the title featured image meta box
+	 */
+	function nv_review_change_featured_image_box_title() {
+		remove_meta_box( 'postimagediv', 'review', 'side' );
+		add_meta_box( 'postimagediv', __('Restaurant Logo'), 'post_thumbnail_meta_box', 'review', 'side', 'high' );
+	}
+	
+	function nv_review_modify_feature_image_text( $content, $postID ) {
+		if ( 'review' == get_post_type( $postID ) ) {
+			return str_replace( __('featured image'), __('Restaurant Logo'), $content );
+		}
+	}
+
 	/**
 	 * Change the title placeholder text
 	 */
@@ -205,7 +228,7 @@
 				$template_path = $theme_file;
 			} else {
 				$template_path = plugin_dir_path( __FILE__ ) . '/templates/single-review.php';
-				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__), array( 'twentytwelve-style' ) );
+				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__) );
 			}
 		} else if ( is_post_type_archive( 'review' ) || is_tax( 'restaurant_categories' ) ) {
 			// else is the request an archive of the Custom Post Type
@@ -213,7 +236,7 @@
 				$template_path = $theme_file;
 			} else {
 				$template_path = plugin_dir_path( __FILE__ ) . '/templates/archive-review.php';
-				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__), array( 'twentytwelve-style' ) );
+				wp_enqueue_style( 'nv_admin_style', plugins_url('css/display.css', __FILE__) );
 			}
 		}
 		// Return the path of the template to use
@@ -236,6 +259,7 @@
 				update_post_meta( $reviewID, 'phone', esc_attr( $_POST['phone'] ) );
 				update_post_meta( $reviewID, 'signatureItems', $_POST['signatureItems'] );
 				update_post_meta( $reviewID, 'ourThoughts', $_POST['ourThoughts'] );
+				update_post_meta( $reviewID, 'galImages', $_POST['galImages'] );
 				$smLinkArray = array();
 				if ( isset( $_POST['smLink'] ) ) {
 					foreach ( $_POST['smLink'] AS $link ) {
@@ -261,13 +285,16 @@
 		}
 		return $terms;
 	}
-	
+
 	add_action( 'init', 'create_nv_reviews' );
 	add_action( 'after_setup_theme', 'nv_add_thumbs', 11 );
 	add_action( 'admin_init', 'nv_review_admin' );
+	add_action( 'do_meta_boxes', 'nv_review_change_featured_image_box_title' );
+	add_filter( 'admin_post_thumbnail_html', 'nv_review_modify_feature_image_text', 10, 2 );
 	add_filter( 'enter_title_here', 'change_enter_title_text', 10, 2 );
 	add_action( 'right_now_content_table_end', 'nv_reviews_totals_rightnow' );
 	add_action( 'save_post', 'nv_add_review_fields', 10, 2 );
 	add_filter( 'template_include', 'nv_reviews_include_template', 1 );
 	add_filter( 'get_the_terms', 'nv_reviews_term_format' );
+	
 ?>

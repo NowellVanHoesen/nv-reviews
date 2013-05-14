@@ -18,9 +18,9 @@
 						} elseif ( is_tag() ) {
 							printf( __( 'Tag Archives: %s', 'nvreview' ), '<span>' . single_tag_title( '', false ) . '</span>' );
 						} elseif ( is_tax() ) {
-							printf( __( 'Reviews Archives: %s', 'nvreview' ), '<span>' . single_cat_title( '', false ) . '</span>' );
+							printf( __( 'Review Archives: %s', 'nvreview' ), '<span>' . single_cat_title( '', false ) . '</span>' );
 						} else {
-							_e( 'Reviews Archives', 'nvreview' );
+							_e( 'Review Archives', 'nvreview' );
 						}
 					?></h1>
 	
@@ -47,7 +47,7 @@
 								<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( sprintf( __( 'Permalink to %s', 'nvreview' ), the_title_attribute( 'echo=0' ) ) ); ?>" rel="bookmark"><?php the_title(); ?></a>
 							</h1>
 							<p>Categories:</p>
-							<ul class="tags blue">
+							<ul class="tags red">
 								<?php the_terms( $post->ID, 'restaurant_categories', '<li>', '</li><li>', '</li>' ); ?>
 							</ul>
 						</header>
@@ -66,7 +66,7 @@
 	
 				<?php if ( $wp_query->max_num_pages > 1 ) : ?>
 					<nav id="nav-below" class="navigation" role="navigation">
-						<h3 class="assistive-text"><?php _e( 'Post navigation', 'nvreview' ); ?></h3>
+						<!--<h3 class="assistive-text"><?php _e( 'Post navigation', 'nvreview' ); ?></h3>-->
 						<div class="nav-previous alignleft"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older reviews', 'nvreview' ) ); ?></div>
 						<div class="nav-next alignright"><?php previous_posts_link( __( 'Newer reviews <span class="meta-nav">&rarr;</span>', 'nvreview' ) ); ?></div>
 					</nav><!-- #<?php echo 'nav-below'; ?> .navigation -->

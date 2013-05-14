@@ -22,7 +22,23 @@ jQuery(document).ready(function($) {
 		smLinkIndex++;
 	});
 	
-	$("body").on( 'mouseup', '#TB_closeWindowButton', function() {
+	/*$("body").on( 'mouseup', '#TB_closeWindowButton', function() {
 		// do ajax load of attached images excluding the featured image and display them in a meta box
+	});*/
+	
+	// media manager stuff
+	$(document.body).on( 'click.nvrOpenMediaManager', '.nvr-open-media', function(e) {
+		e.preventDefault();
+		var tmpShortcode = '[gallery ids="' + $('#nvr_galImages').val() + '" ]';
+		var nv_reviews_frame;
+		nv_reviews_frame = wp.media.gallery.edit( tmpShortcode ).on('update',function( obj ) {
+			var galImgList = [];
+			$.each(obj.models, function( id, val ) {
+				galImgList.push( val.id );
+			});
+			$('#nvr_galImages').val( galImgList.join(',') );
+			console.log( $('#nvr_galImages').val() );
+		});
 	});
+	
 });
