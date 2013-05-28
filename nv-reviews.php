@@ -3,13 +3,13 @@
 		Plugin Name: NV Reviews
 		Plugin URI: http://nvwebdev.com/
 		Description: A custom post type for restaurant reviews
-		Version: 0.1
+		Version: 0.2
 		Author: Nowell VanHoesen
 		Author URI: http://nvwebdev.com/
 		License: GPL2
 	*/
 	// ini_set('display_errors', '1');
-	require( 'inc/nv-helpers.php' );
+	require( plugin_dir_path( __FILE__ ) . 'inc/nv-helpers.php' );
 	
 	function create_nv_reviews() {
 		register_post_type( 'review',
@@ -270,13 +270,8 @@
 					}
 				}
 				update_post_meta( $reviewID, 'smLink', $smLinkArray );
-				update_alphabatized_link_list();
 			}
 		}
-	}
-	
-	function update_alphabatized_link_list() {
-		
 	}
 	
 	function nv_reviews_term_format( $terms ) {
@@ -285,7 +280,26 @@
 		}
 		return $terms;
 	}
+	
+	/* custom taxonomy widget specific to Reviews */
+	class NV_Reviews_Tax_Widget extends WP_Widget {
+		
+		function NV_Reviews_Tax_Widget() {
+			$opts = array(
+				'classname' => 'nv_review_tax_widget',
+				'description' => 'Display a list of taxonomies for Reviews.',
+			);
+			$this->WP_Widget( 'NV_Reviews_Tax_Widget', 'NV Review Taxonomy Widget', $opts );
+		}
+		
+		//function 
+	}
 
+	function nv_review_register_widgets() {
+		register_widget( 'NV_Reviews_Tax_Widget' );
+	}
+	
+	add_action( 'widgets_init', 'nv_review_register_widgets' );
 	add_action( 'init', 'create_nv_reviews' );
 	add_action( 'after_setup_theme', 'nv_add_thumbs', 11 );
 	add_action( 'admin_init', 'nv_review_admin' );
